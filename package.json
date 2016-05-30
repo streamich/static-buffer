@@ -1,0 +1,24 @@
+{
+  "name": "static-buffer",
+  "description": "StaticBuffer, just like Buffer but you can execute machine code in it.",
+  "version": "1.0.0",
+  "main": "index.js",
+  "keywords": [
+    "static",
+    "buffer",
+    "static-buffer",
+    "StaticBuffer",
+    "StaticArrayBuffer",
+    "memory",
+    "malloc",
+    "alloc"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "http://github.com/streamich/static-buffer"
+  },
+  "dependencies": {
+    "libsys": "*",
+    "libjs": "*"
+  }
+}
