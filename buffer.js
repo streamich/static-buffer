@@ -1,4 +1,4 @@
-var StaticArrayBuffer = ArrayBuffer.Static;
+var StaticArrayBuffer = ArrayBuffer.Static || require('./arraybuffer').StaticArrayBuffer;
 
 
 exports.StaticBuffer = StaticBuffer;

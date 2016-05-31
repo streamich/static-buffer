@@ -1,5 +1,30 @@
 # `StaticArrayBuffer` and `StaticBuffer`
 
+## Hello World Example
+
+Print `"Hello World"` to console, we do it by executing `write` system call to `1` file
+descriptor which is `STDOUT`:
+
+```js
+var StaticBuffer = require('static-buffer/buffer').StaticBuffer;
+
+var sbuf = StaticBuffer.from([
+    0x48, 0xc7, 0xc0, 1, 0, 0, 0,       // mov    $0x1,%rax         # System call `1` -- SYS_write
+    0x48, 0xc7, 0xc7, 1, 0, 0, 0,       // mov    $0x1,%rdi         # File descriptor `1` -- STDOUT
+    0x48, 0x8d, 0x35, 10, 0, 0, 0,      // lea    0x1(%rip),%rsi    # Data address
+    0x48, 0xc7, 0xc2, 13, 0, 0, 0,      // mov    $13,%rdx          # Number of bytes to write -- 13
+    0x0f, 0x05,                         // syscall                  # Execute the system call.
+    0xc3,                               // retq                     # Return
+    0x48, 0x65, 0x6C, 0x6C, 0x6F, 0x20, // Hello_
+    0x57, 0x6F, 0x72, 0x6C, 0x64, 0x21, // World!
+    0x0A, 0                             // \n\0
+], 'rwe'); // r - readable, w - writable, e - executable
+
+sbuf.call([], 0); // Hello World!
+```
+
+## How it works
+
 `StaticArrayBuffer` and `StaticBuffer` extend `ArrayBuffer` and `Buffer` classes and 
 provide such extra functionality:
 
@@ -8,13 +33,13 @@ provide such extra functionality:
  3. Change protection to backing memory.
  4. Promise that actual data in memory will never be moved by runtime.
 
-Memory protection:
+Memory protection flags:
 
- - 'r' - readable
- - 'w' - writable
- - 'e' - executable
+ - `'r'` - readable
+ - `'w'` - writable
+ - `'e'` - executable
 
-Usage:
+## Usage
 
 ```js
 var StaticArrayBuffer = require('static-buffer/arraybuffer').StaticArrayBuffer;
@@ -69,25 +94,3 @@ sbuf.buffer.free();
 sbuf = null;
 ```
 
-## Hello World Example
-
-Print `"Hello World"` to console, we do it by executing `write` system call to `1` file
-descriptor which is `STDOUT`:
-
-```js
-var StaticBuffer = require('static-buffer/buffer').StaticBuffer;
-
-var sbuf = StaticBuffer.from([
-    0x48, 0xc7, 0xc0, 1, 0, 0, 0,       // mov    $0x1,%rax         # System call `1` -- SYS_write
-    0x48, 0xc7, 0xc7, 1, 0, 0, 0,       // mov    $0x1,%rdi         # File descriptor `1` -- STDOUT
-    0x48, 0x8d, 0x35, 10, 0, 0, 0,      // lea    0x1(%rip),%rsi    # Data address
-    0x48, 0xc7, 0xc2, 13, 0, 0, 0,      // mov    $13,%rdx          # Number of bytes to write -- 13
-    0x0f, 0x05,                	        // syscall                  # Execute the system call.
-    0xc3,                               // retq                     # Return
-    0x48, 0x65, 0x6C, 0x6C, 0x6F, 0x20, // Hello_
-    0x57, 0x6F, 0x72, 0x6C, 0x64, 0x21, // World!
-    0x0A, 0                             // \n\0
-], 'rwe');
-
-sbuf.call([], 0); // Hello World!
-```

@@ -1,5 +1,7 @@
-var libsys = require('../libsys/libsys');
-var libjs = require('../libjs/libjs');
+// var libsys = require('../libsys/libsys');
+var libsys = require('libsys');
+// var libjs = require('../libjs/libjs');
+var libjs = require('libjs');
 
 
 exports.StaticArrayBuffer = StaticArrayBuffer;
