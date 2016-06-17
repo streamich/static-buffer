@@ -43,13 +43,34 @@ function alloc(size, prot) {
 }
 
 
+function allocAt(addr, size) {
+    var ab = libsys.malloc(addr, size);
+    if(!(ab instanceof ArrayBuffer))
+        throw Error('Could not allocate ArrayBuffer.');
+    return ab;
+}
+
+
 function StaticArrayBuffer(size, prot) {
-    var ab = alloc(size, prot);
+    var ab;
+    if(size instanceof ArrayBuffer) {
+        ab = size;
+    } else {
+        ab = alloc(size, prot);
+    }
     ab.__proto__ = StaticArrayBuffer.prototype;
     return ab;
 }
 
 ArrayBuffer.Static = StaticArrayBuffer;
+
+StaticArrayBuffer.alloc = function(size, prot) {
+    return new StaticArrayBuffer(size, prot);
+};
+
+StaticArrayBuffer.allocAt = function(addr, size) {
+    return new StaticArrayBuffer(allocAt(addr, size));
+};
 
 StaticArrayBuffer.isStaticArrayBuffer = function(sab) {
     if((sab instanceof StaticArrayBuffer) && (typeof sab.getAddress === 'function')) return true;

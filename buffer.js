@@ -93,7 +93,7 @@ StaticBuffer.prototype.__proto__ =
 StaticBuffer.prototype.call = function(args, offset) {
     if(!args) args = [];
     if(!offset) offset = 0;
-    this.buffer.call(args, this.byteOffset + offset);
+    return this.buffer.call(args, this.byteOffset + offset);
 };
 
 StaticBuffer.prototype.getAddress = function(offset) {
